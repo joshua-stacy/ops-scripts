@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 export action=$1
 
 Modify()
@@ -30,6 +32,16 @@ Delete()
 {
     DELETED="$( git status | awk '{ if ($1 == "deleted:") print $2 }'  | xargs echo $DELETED )"
     for item in ${DELETED}; do
+        {
+            echo removing $item;
+            git rm $item;
+        }
+    done
+}
+
+Never()
+{
+    for item in ${MODIFIED}; do
         {
             echo removing $item;
             git rm $item;
