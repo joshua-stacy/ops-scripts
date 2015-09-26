@@ -37,16 +37,6 @@ Delete()
     done
 }
 
-Never()
-{
-    for item in ${MODIFIED}; do
-        {
-            echo removing $item;
-            git rm $item;
-        }
-    done
-}
-
 case ${action} in
     add)
         Add
