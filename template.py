@@ -8,15 +8,11 @@ import sys
 from argparse import ArgumentParser
 
 def argParser():
-    parser = ArgumentParser(description="")
+    parser = ArgumentParser(description="Prints base64 encoded password")
 
-    parser.add_argument("-", "--", help="")
+    parser.add_argument("-p", "--password", help="Password to encode", required=True)
 
     args = parser.parse_args()
-
-    if (args. is None):
-        parser.print_help()
-        sys.exit(1)
 
     return args
 
@@ -27,4 +23,3 @@ def main(args):
 
 if __name__ == "__main__":
     main(sys.argv)
-    sys.exit(0)
