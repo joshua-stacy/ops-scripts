@@ -13,12 +13,13 @@ from Crypto.Hash import SHA256
 from Crypto import Random
 
 def argParser():
-    parser = ArgumentParser(description="Prints base64 encoded password")
-    parser.add_argument("-a", "--action", help="Encrypt or Decrypt", default="decrypt", choices=["encrypt", "decrypt"], required=True)
-    parser.add_argument("-f", "--file", help="File to Encrypt/Decrypt", required=True)
-    args = parser.parse_args()
+	parser = ArgumentParser(description="Prints base64 encoded password")
+	parser.add_argument("-a", "--action", help="Encrypt or Decrypt", default="decrypt", choices=["encrypt", "decrypt"], required=True)
+	parser.add_argument("-f", "--file", help="File to Encrypt/Decrypt", required=True)
+	parser.add_argument("-p", "--password", help="Optional Password", required=False)
+	args = parser.parse_args()
 
-    return args
+	return args
 
 
 def encryptfile(args, key, encode=True):
@@ -55,22 +56,29 @@ def decryptfile(args, key, decode=True):
 	output_file.close()
 	return (0)
 
-def main(args):
-    args = argParser()
+def getpassword(args, verify):
+	if args.password is not None:
+		return(args.password)
+	else:
+		password = getpass.getpass(prompt="Password: ")
+		if verify:
+			verify_password = getpass.getpass(prompt="Verify Password: ")
+			if password != verify_password:
+				print("Passwords do not match.")
+				exit(1)
+		return (password)
 
-    if args.action == "encrypt":
-    	password = getpass.getpass(prompt="Password: ")
-    	verify_password = getpass.getpass(prompt="Verify Password: ")
-    	if password != verify_password:
-    		print("Passwords do not match.")
-    		exit(1)
-    	#print("Encryption Password: " + password)
-    	encryptfile(args, password)
-    	exit(0)
-    elif args.action == "decrypt":
-    	password = getpass.getpass(prompt="Password: ")
-    	decryptfile(args, password)
-    	exit(0)
+def main(args):
+	args = argParser()
+
+	if args.action == "encrypt":
+		password = getpassword(args, True)
+		encryptfile(args, password)
+		exit(0)
+	elif args.action == "decrypt":
+		password = getpassword(args, False)
+		decryptfile(args, password)
+	exit(0)
 
 if __name__ == "__main__":
     main(sys.argv)
